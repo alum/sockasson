@@ -1,0 +1,5 @@
+name: sockasson
+channels:
+- defaults
+prefix: /Users/filip/anaconda3/envs/sockasson
+
