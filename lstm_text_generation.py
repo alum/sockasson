@@ -20,7 +20,7 @@ import numpy as np
 import random
 import sys
 
-path = './blob-cornelis'
+path = './blobdylan.text'
 text = open(path).read().lower()
 print('corpus length:', len(text))
 
