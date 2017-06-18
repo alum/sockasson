@@ -23,7 +23,7 @@ import sys
 import re
 
 #path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
-path = './blob-cornelis'
+path = './mindre1m.txt'
 text = open(path).read().lower()
 print('corpus length:', len(text))
 
@@ -58,7 +58,7 @@ model = Sequential()
 model.add(LSTM(128, input_shape=(2, len(words))))
 model.add(Dense(len(words)))
 model.add(Activation('softmax'))
-optimizer = RMSprop(lr=0.005) # original 0.01
+optimizer = RMSprop(lr=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 def sample(preds, temperature=1.0):
