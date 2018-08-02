@@ -12,7 +12,7 @@ has at least ~100k characters. ~1M is better.
 
 from __future__ import print_function
 import keras
-from keras.models import Sequential
+from keras.models import Sequential, load_model
 from keras.layers import Dense, Activation
 from keras.layers import LSTM, Dropout
 from keras.optimizers import RMSprop
@@ -23,7 +23,7 @@ import sys
 import re
 
 #path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
-path = './mindre1m.txt'
+path = './trump_20170926.text'
 text = open(path).read().lower()
 print('corpus length:', len(text))
 
@@ -55,7 +55,7 @@ for i, bigram in enumerate(bigrams):
 # build the model: a single LSTM
 print('Build model...')
 model = Sequential()
-model.add(LSTM(128, input_shape=(2, len(words))))
+model.add(LSTM(512, input_shape=(2, len(words))))
 model.add(Dense(len(words)))
 model.add(Activation('softmax'))
 optimizer = RMSprop(lr=0.01)
@@ -72,6 +72,8 @@ def sample(preds, temperature=1.0):
 
 # train the model, output generated text after each iteration
 tbCallBack = keras.callbacks.TensorBoard(log_dir='./graph', histogram_freq=0, write_graph=True, write_images=False)
+checkpoint_callback = keras.callbacks.ModelCheckpoint(filepath='./trump_20170926.h5', monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
+
 
 for iteration in range(1, 60):
     print()
@@ -81,7 +83,7 @@ for iteration in range(1, 60):
     model.fit(X, y,
               batch_size=128,
               epochs=1,
-              callbacks=[tbCallBack])
+              callbacks=[tbCallBack, checkpoint_callback])
 
     start_index = random.randint(0, len(text_sliced) - 2)
 
